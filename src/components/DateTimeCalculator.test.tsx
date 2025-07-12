@@ -3,20 +3,33 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import DateTimeCalculator from './DateTimeCalculator';
 import '@testing-library/jest-dom';
 import axios from 'axios';
-
+import { DateTimeDifferenceFormProps as DateTimeDifferenceFormMockProps } from './DateTimeDifferenceForm';
+import { DateTimeOperationFormProps as DateTimeOperationFormMockProps } from './DateTimeOperationForm';
+import { ResultDisplayProps as ResultDisplayMockProps } from './ResultDisplay';
+import * as hooks from '../hooks';
 // Mock axios
 jest.mock('axios');
 
 // Mock child components
-jest.mock('./DateTimeOperationForm', () => ({ onSubmit, loading }) => (
-    <div data-testid="operation-form">Operation Form</div>
-));
-jest.mock('./DateTimeDifferenceForm', () => ({ onSubmit, loading }) => (
-    <div data-testid="difference-form">Difference Form</div>
-));
-jest.mock('./ResultDisplay', () => ({ result }) => (
-    <div data-testid="result-display">{JSON.stringify(result)}</div>
-));
+jest.mock('./DateTimeOperationForm', () => ({
+    __esModule: true,
+    default: ({ onSubmit, loading }: DateTimeOperationFormMockProps) => (
+        <div data-testid="operation-form">Operation Form</div>
+    )
+}));
+
+jest.mock('./DateTimeDifferenceForm', () => ({
+    __esModule: true,
+    default: ({ onSubmit, loading }: DateTimeDifferenceFormMockProps) => (
+        <div data-testid="difference-form">Difference Form</div>
+    )
+}));
+jest.mock('./ResultDisplay', () => ({
+    __esModule: true,
+    default: ({ result }: ResultDisplayMockProps) => (
+        <div data-testid="result-display">{JSON.stringify(result)}</div>
+    )
+}));
 
 // Mock hooks
 jest.mock('../hooks', () => ({
@@ -24,19 +37,20 @@ jest.mock('../hooks', () => ({
     useDateTimeDifference: jest.fn(),
 }));
 
-import * as hooks from '../hooks';
+
 
 describe('DateTimeCalculator', () => {
     beforeEach(() => {
         jest.clearAllMocks();
-        hooks.useDateTimeOperations.mockReturnValue({
+
+        (hooks.useDateTimeOperations as jest.Mock).mockReturnValue({
             executeOperation: jest.fn(),
             result: null,
             loading: false,
             error: null,
             reset: jest.fn(),
         });
-        hooks.useDateTimeDifference.mockReturnValue({
+        (hooks.useDateTimeDifference as jest.Mock).mockReturnValue({
             executeDifference: jest.fn(),
             result: null,
             loading: false,
@@ -58,7 +72,7 @@ describe('DateTimeCalculator', () => {
     });
 
     it('shows loading spinner when loading', () => {
-        hooks.useDateTimeOperations.mockReturnValue({
+        (hooks.useDateTimeOperations as jest.Mock).mockReturnValue({
             executeOperation: jest.fn(),
             result: null,
             loading: true,
@@ -70,7 +84,7 @@ describe('DateTimeCalculator', () => {
     });
 
     it('displays error alert when error occurs', () => {
-        hooks.useDateTimeOperations.mockReturnValue({
+        (hooks.useDateTimeOperations as jest.Mock).mockReturnValue({
             executeOperation: jest.fn(),
             result: null,
             loading: false,
@@ -82,7 +96,7 @@ describe('DateTimeCalculator', () => {
     });
 
     it('shows result after operation', async () => {
-        hooks.useDateTimeOperations.mockReturnValue({
+        (hooks.useDateTimeOperations as jest.Mock).mockReturnValue({
             executeOperation: jest.fn(),
             result: { result: '2025-07-12T12:00:00Z' },
             loading: false,
@@ -97,14 +111,14 @@ describe('DateTimeCalculator', () => {
     it('resets forms and results when Reset button is clicked', async () => {
         const resetOp = jest.fn();
         const resetDiff = jest.fn();
-        hooks.useDateTimeOperations.mockReturnValue({
+        (hooks.useDateTimeOperations as jest.Mock).mockReturnValue({
             executeOperation: jest.fn(),
             result: { result: 'foo' },
             loading: false,
             error: null,
             reset: resetOp,
         });
-        hooks.useDateTimeDifference.mockReturnValue({
+        (hooks.useDateTimeDifference as jest.Mock).mockReturnValue({
             executeDifference: jest.fn(),
             result: { result: 'bar' },
             loading: false,

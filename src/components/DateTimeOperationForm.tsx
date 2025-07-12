@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { DateTimeOperation } from '../types/datetime';
 import { TextField, Button, Box, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 
-interface DateTimeOperationFormProps {
+export interface DateTimeOperationFormProps {
     onSubmit: (data: DateTimeOperation) => void;
     loading?: boolean;
 }

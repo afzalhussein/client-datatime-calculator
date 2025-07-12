@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { DateTimeDifference } from '../types/datetime';
 import { TextField, Button, Box, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 
-interface DateTimeDifferenceFormProps {
+export interface DateTimeDifferenceFormProps {
     onSubmit: (data: DateTimeDifference) => void;
     loading?: boolean;
 }

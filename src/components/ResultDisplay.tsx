@@ -3,7 +3,7 @@ import { Box, Typography, Paper, Alert, CircularProgress } from '@mui/material';
 import { DateTimeResult } from '../types/datetime';
 import { format, isValid } from 'date-fns';
 
-interface ResultDisplayProps {
+export interface ResultDisplayProps {
     result: DateTimeResult | null;
     loading?: boolean;
     'data-testid'?: string;
